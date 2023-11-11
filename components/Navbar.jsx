@@ -4,10 +4,10 @@ import React from "react";
 
 export const Navbar = () => {
   return (
-    <div className=" navbar bg-base-100 rounded-xl w-[90%] absolute top-3 left-1/2 -translate-x-1/2 flex">
+    <div className=" navbar bg-base-300 flex">
       <div className="navbar-start">
         <Link href={"/landing"}>
-          <Image src={"/logo.jpeg"} width={50} height={50}></Image>
+          <Image src={"/logoTransparent.png"} width={50} height={50}></Image>
         </Link>
       </div>
       <div className="navbar-center">

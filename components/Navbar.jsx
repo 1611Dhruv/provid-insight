@@ -23,7 +23,7 @@ export const Navbar = () => {
         <Link className="btn btn-ghost mx-4" href="/summary">
           Summary
         </Link>
-        <Link></Link>
+        <Link href={"/login"}></Link>
       </div>
     </div>
   );

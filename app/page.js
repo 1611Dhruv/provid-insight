@@ -1,4 +1,7 @@
 import ProgressChart from "@/components/ProgressChart";
+import StatisticsBoard from "@/components/StatisticsBoard";
+import { faFileLines, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
 export default function Home() {
@@ -13,11 +16,20 @@ export default function Home() {
         <div className="mx-24">
           <ProgressChart />
         </div>
-        <div className="flex flex-row mx-32">
-          <div className="flex justify-evenly">
-            <Link href={"/record"}>Record</Link>
-            <Link href={"/recordings"}>Full Log</Link>
+        <div className="flex flex-col h-full mx-32 w-full">
+          <div className="flex flex-row  w-full justify-evenly">
+            <Link href={"/record"}>
+              <div className=" rounded-full border-[1px] p-5 items-center border-black">
+                <FontAwesomeIcon width={30} height={30} icon={faPlay} />
+              </div>
+            </Link>
+            <Link href={"/recordings"}>
+              <div className=" rounded-full border-[1px] p-5 items-center border-black">
+                <FontAwesomeIcon width={30} height={30} icon={faFileLines} />
+              </div>
+            </Link>
           </div>
+          <StatisticsBoard />
         </div>
       </div>
     </div>

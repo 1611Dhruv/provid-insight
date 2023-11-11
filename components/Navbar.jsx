@@ -15,7 +15,7 @@ export const Navbar = () => {
           Home
         </Link>
         <Link className="btn btn-ghost mx-4" href="/record">
-          Record New
+          Record
         </Link>
         <Link className="btn btn-ghost mx-4" href="/recordings">
           View Recordings
@@ -23,6 +23,7 @@ export const Navbar = () => {
         <Link className="btn btn-ghost mx-4" href="/summary">
           Summary
         </Link>
+        <Link></Link>
       </div>
     </div>
   );

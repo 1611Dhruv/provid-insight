@@ -1,4 +1,12 @@
-import { LineChart, Line } from "recharts";
+"use client";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 
 const data = [
   {
@@ -48,6 +56,9 @@ export default function ProgressChart() {
   return (
     <LineChart width={400} height={400} data={data}>
       <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+      <CartesianGrid stroke="#ccc" />
+      <XAxis dataKey="name" />
+      <YAxis />
     </LineChart>
   );
 }

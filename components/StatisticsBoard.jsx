@@ -1,3 +1,3 @@
 export default function StatisticsBoard() {
-  return <div className="w-[500px] h-[500px] bg-black">Board</div>;
+  return <div className="rounded-2xl w-[600px] h-[270px] bg-black"></div>;
 }

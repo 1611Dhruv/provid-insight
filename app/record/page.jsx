@@ -3,17 +3,27 @@ import FileDrop from "@/components/FileDrop";
 import { useState } from "react";
 
 export default function RecordingPage() {
-  const [file, setFile] = useState(null);
+  const [fileURL, setFileURL] = useState(null);
 
   const processFile = (fileParam) => {
-    fileParam.arrayBuffer().then((data) => {
-      setFile(file);
-      console.log(data);
-    });
+    if (fileParam.type !== "video/mp4") {
+      alert("Only mp4 files are supported");
+      return;
+    }
+    var objectURL = URL.createObjectURL(fileParam);
+    setFileURL(objectURL);
+    console.log(objectURL);
   };
   return (
     <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-      {file ? JSON.stringify(file) : <FileDrop processFile={processFile} />}
+      {fileURL ? (
+        <video controls className="rounded-lg">
+          <source src={fileURL} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <FileDrop processFile={processFile} />
+      )}
     </div>
   );
 }

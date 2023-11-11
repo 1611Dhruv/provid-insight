@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <div className="bg-[rgba(255,255,255,1)]	 w-[90%] rounded-2xl relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  py-[50px]">
       <h1 className="text-6xl text-center font-bold mb-10 backdrop:blur-lg">
-        {" "}
         Welcome Back {userName}
       </h1>
       <div className="flex justify-between">

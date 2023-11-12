@@ -13,7 +13,6 @@ const colName = "Users";
 export async function POST(req) {
   try {
     const data = await req.formData();
-    console.log(data);
     const file = data.get("file");
     const { email } = JSON.parse(data.get("user"));
     if (!file) {
@@ -25,7 +24,7 @@ export async function POST(req) {
       console.log(stderr);
     })
 
-    console.log("Python Done")
+    console.log("Python Done");
     await client.connect();
     const db = client.db(dbName);
     const bucket = new mongodb.GridFSBucket(db);

@@ -10,7 +10,8 @@ export const DataCards = ({
   fid,
 }) => {
   return (
-    <div className="card flex w-96 bg-base-100 shadow-xl mx-4 mb-7">
+    <div className = "flex justify-center place-items-center mb-14">
+    <div className="card w-96 bg-base-100 shadow-xl mb-7 align-center">
       <figure>
         <img src="/bg.jpg" alt="video thumbnail" />
       </figure>
@@ -31,6 +32,7 @@ export const DataCards = ({
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

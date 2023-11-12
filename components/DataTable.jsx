@@ -21,10 +21,10 @@ const DataTable = ({ data }) => {
         <tbody>
           {data.map((item) => (
             <tr
-              key={item.srNo}
+              key={item.serial}
               className="hover:bg-gray-100 cursor-pointer transition-all duration-200"
             >
-              <td className="py-2 px-4 border-b text-center">{item.srNo}</td>
+              <td className="py-2 px-4 border-b text-center">{item.serial}</td>
               <td className="py-2 px-4 border-b text-center">
                 {item.uploadTime}
               </td>
@@ -39,7 +39,7 @@ const DataTable = ({ data }) => {
               </td>
               <td className="py-2 px-4 border-b text-center">
                 <Link
-                  href={`/details/${item.srNo}`}
+                  href={`/recordings/${item.fid}`}
                   className="text-blue-500 hover:underline"
                 >
                   Learn More

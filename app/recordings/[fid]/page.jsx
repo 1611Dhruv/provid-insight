@@ -69,9 +69,7 @@ export default function ViewResult({ params }) {
     }
   };
 
-  return;
-  {
-    loading === 0 ? (
+  return loading == 0 ? (
       <div className="mt-10 flex flex-col items-center">
         <div className="grid grid-cols-1 md:grid-cols-3 w-11/12 p-4 mx-auto text-center">
           <div className="mockup-browser border bg-slate-300 col-span-2">
@@ -134,5 +132,4 @@ export default function ViewResult({ params }) {
     ) : (
       <BouncingDotsLoader />
     );
-  }
 }

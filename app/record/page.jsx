@@ -31,8 +31,13 @@ export default function RecordingPage() {
           alert("Upload failed");
         }
         setFetchLoad(false);
+        setFile(null);
       });
       setFetchLoad(true);
+      setTimeout(()=>{
+        setFetchLoad(false);
+        setFile(null);
+      },60000)
     } catch (error) {
       console.log("Error uploading");
     }

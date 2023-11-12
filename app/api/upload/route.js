@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Readable } from "stream";
 import fs from "fs";
+import util from "node:util"
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
 const { spawnSync, exec } = require("child_process");
@@ -27,9 +28,12 @@ export async function POST(req) {
     fs.appendFileSync(outfile, Buffer.from(bytes));
     const buffer = Buffer.from(bytes);
     const stream = Readable.from(buffer);
-    exec("ffmpeg -i " + outfile + " " + mp3);
 
-    exec("python llm/annotator.py " + outfile + " " + mp3, async(err, stdout, stderr) => {
+    const execPromise = util.promisify(exec)
+
+    await execPromise("ffmpeg -i " + outfile + " " + mp3);
+
+    await execPromise("python llm/annotator.py " + outfile + " " + mp3, async(err, stdout, stderr) => {
       try {
         console.log(stdout, stderr, err);
         const json_py = JSON.parse(stdout);
@@ -52,11 +56,17 @@ export async function POST(req) {
       } catch (err) {
         console.log(err.stack);
       }
+      return Response.json({ success: true });
+
+    }).then((res)=>{
+      console.log(res)
     })
+    console.log("X")
+
+
 
   } catch (err) {
     console.log(err.stack);
-  } finally {
-    return Response.json({ success: true });
-  }
+  } 
+  return Response.json({ success: true });
 }

@@ -87,10 +87,11 @@ export default function ViewResult({ params }) {
         const nums = key.split("-");
         const x = parseFloat(nums[0]);
         const y = parseFloat(nums[1]);
-        return videoRef.current >= x && videoRef.current < y;
-      })[0];
-      console.log(x);
-      setCurrKey(x);
+        return (
+          videoRef.current.currentTime >= x && videoRef.current.currentTime < y
+        );
+      });
+      setCurrKey(x[0]);
     }
   };
   return (
@@ -115,7 +116,7 @@ export default function ViewResult({ params }) {
           );
         })}
       </div>
-      <div>{timestamps[currKey].feedback}</div>
+      <div>{currKey && timestamps[currKey].feedback}</div>
     </div>
   );
 }

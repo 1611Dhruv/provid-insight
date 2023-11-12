@@ -112,7 +112,9 @@ export default function ViewResult({ params }) {
   const scrollSpan = (index) => {
     console.log(index);
     if (spanRef[index]) {
-      spanRef[index].current.scrollIntoView();
+      spanRef[index].current.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
   }
 
@@ -206,9 +208,11 @@ export default function ViewResult({ params }) {
     </div>
 
     <div>
-    <div class="w-3/4 ml-7">
+    <div class="w-11/12 ml-7">
 
+    <div className="bg-slate-100 px-4 py-4 rounded-md">
     <ScrollableComponent data={feedbackList} containerId={"feedbackContainer"}/>
+    </div>
 
     <div className="truncate px-8 rounded-md font-light">
         {Object.keys(timestamps).map((key) => {

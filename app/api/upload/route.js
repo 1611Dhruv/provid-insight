@@ -40,8 +40,6 @@ export async function POST(req) {
       score: "",
       description: ""
     })
-  
-
   } catch (err) {
     console.log(err.stack);
   } finally {

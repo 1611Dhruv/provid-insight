@@ -23,9 +23,10 @@ export async function GET(req) {
       user: user.email
     });
     
-    const arr = await cursor.toArray()    
-    return Response.json({ data:arr })
+    const arr = await cursor.toArray()
+    console.log(arr)
     
+    return Response.json({ data:arr })
   } catch (err) {
     console.log(err.stack);
   }

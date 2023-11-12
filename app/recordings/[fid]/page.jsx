@@ -25,12 +25,12 @@ export default function ViewResult({ params }) {
   //   })
   // },[])
   useEffect(() => {
-    fetch("/api/download?fid=" + params.fid).then((r) => 
-      r.blob()
-    ).then((blob) => {
-      console.log(blob);
-      setBlob(blob);
-  });
+    fetch("/api/download?fid=" + params.fid)
+      .then((r) => r.blob())
+      .then((blob) => {
+        console.log(blob);
+        setBlob(blob);
+      });
   }, []);
 
   // if (api_dat==null) return <h1></h1>
@@ -156,12 +156,17 @@ export default function ViewResult({ params }) {
   //   scroll.scrollTo(100); // Scrolling to 100px from the top of the page.
   // };
 
-  const spanRef = Object.keys(timestamps).map(() => useRef(null));
+  const spanRef = useRef([]);
+  const addToRefs = (el) => {
+    if (el && !spanRef.current.includes(el)) {
+      spanRef.current.push(el);
+    }
+  };
 
   const scrollSpan = (index) => {
     console.log(index);
-    if (spanRef[index]) {
-      spanRef[index].current.scrollIntoView({
+    if (spanRef.current[index]) {
+      spanRef.current[index].scrollIntoView({
         behavior: "smooth",
       });
     }
@@ -214,9 +219,7 @@ export default function ViewResult({ params }) {
               return (
                 <span
                   key={key}
-                  ref={
-                    spanRef[transcriptList.indexOf(timestamps[key].transcript)]
-                  }
+                  ref={addToRefs}
                   id={`timestamp-${key}`}
                   className={`${currKey == key ? "bg-yellow-200" : null}`}
                   onClick={() => scrollToHighlightedElement(key)}

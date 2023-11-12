@@ -9,12 +9,12 @@ export default function RecordingPage() {
     FormD;
   };
 
-  const processFile = (fileParam) => {
-    if (fileParam.type !== "video/mp4") {
-      alert("Only mp4 files are supported");
-      return;
+  const processFile = (acceptedFiles) => {
+    if (acceptedFiles[0].type === "video/mp4") {
+      setFile(acceptedFiles[0]);
+    } else {
+      alert("Please upload a mp4 video file");
     }
-    setFile(fileParam);
   };
 
   return (

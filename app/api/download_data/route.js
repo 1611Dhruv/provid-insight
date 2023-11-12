@@ -35,8 +35,7 @@ export async function GET(req) {
       return Response.json({ status: 404 });
     }
     let data = userArr[0].data;
-    console.log(data);
-    return Response.json({data: data}, { status: 200 });
+    return Response.json({ data: data }, { status: 200 });
   } catch (err) {
     console.log(err.stack);
   }

@@ -15,10 +15,10 @@ const VideoPreview = ({ stream }) => {
   }
   return (
     <video
-      className="rounded-2xl"
+      className="rounded-2xl "
       ref={videoRef}
-      width={1000}
       height={1000}
+      width={1000}
       autoPlay
       controls
     />
@@ -49,7 +49,7 @@ export default function Recorder({ processFile }) {
                 <div
                   width={1000}
                   height={1000}
-                  className="rounded-2xl border-2 border-dashed w-[500px] h-[400px] flex items-center justify-center"
+                  className="rounded-2xl border-2 border-dashed w-[720px] h-[400px] flex items-center justify-center"
                 >
                   <p>Start a Recording!</p>
                 </div>

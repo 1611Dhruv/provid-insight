@@ -10,7 +10,12 @@ export const Navbar = () => {
     <div className="navbar">
       <div className="navbar-start ml-4">
         <Link href={"/landing"}>
-          <Image src={"/bucky.png"} width={50} height={50} alt="badger logo"></Image>
+          <Image
+            alt={"buckypng"}
+            src={"/bucky.png"}
+            width={50}
+            height={50}
+          ></Image>
         </Link>
       </div>
       {user ? (
@@ -18,10 +23,16 @@ export const Navbar = () => {
           <Link className="btn btn-ghost mx-4 normal-case text-med" href="/">
             Home
           </Link>
-          <Link className="btn btn-ghost mx-4 normal-case text-med" href="/record">
+          <Link
+            className="btn btn-ghost mx-4 normal-case text-med"
+            href="/record"
+          >
             Upload/Record
           </Link>
-          <Link className="btn btn-ghost mx-4 normal-case text-med" href="/recordings">
+          <Link
+            className="btn btn-ghost mx-4 normal-case text-med"
+            href="/recordings"
+          >
             View My Videos
           </Link>
           <Link href={"/login"}></Link>

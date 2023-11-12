@@ -4,10 +4,17 @@ import { faFileLines, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { LoadingOverlay } from "@mantine/core";
 export default function Home() {
   const { user, isLoading } = useUser();
-  if (isLoading) return <p></p>;
-  return (
+  return isLoading ? (
+    <LoadingOverlay
+      className="w-screen h-screen"
+      visible={isLoading}
+      zIndex={1000}
+      overlayProps={{ radius: "sm", blur: 2 }}
+    />
+  ) : (
     <div>
       <div className="mt-20 flex flex-col items-center">
         <h1 className="text-6xl text-center font-bold mb-10 backdrop:blur-lg">
@@ -59,7 +66,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div class="w-3/5 p-4 mx-auto text-center">
+      <div className="w-3/5 p-4 mx-auto text-center">
         <div className="chat chat-start">
           <div className="chat-bubble">
             It's a highlight reel of my speaking career.

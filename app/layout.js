@@ -10,7 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="w-screen h-screen">
+      <body className="bg-gradient-to-r from-slate-50 to-slate-200 w-screen h-screen">
         <UserProvider>
           <Navbar />
           {children}

@@ -11,10 +11,7 @@ export default function LandingPage() {
         ProVid Insight
       </h1>
       <p className="text-black text-lg text-center mb-7 ml-[15%] mr-[15%]">
-        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-        dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+      Embark on a presentation journey that's anything but "insightless" with ProVid Insight! This platform is your backstage pass to the show of refined presentation skills – perfect for those battling butterflies in their stomach or anyone on a quest to master the art of public speaking. ProVid Insight is not just an application; it's your trusted wingman on the stage of self-expression.
       </p>
       <Link
         href={user ? "/" : "/api/auth/login"}

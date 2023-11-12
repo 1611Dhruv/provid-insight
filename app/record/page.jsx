@@ -5,16 +5,27 @@ import { useEffect, useRef, useState } from "react";
 export default function RecordingPage() {
   const [file, setFile] = useState(null);
 
-  const handleSubmit = () => {
-    FormD;
-  };
-
-  const processFile = (fileParam) => {
-    if (fileParam.type !== "video/mp4") {
-      alert("Only mp4 files are supported");
+  const handleUpload = () => {
+    console.log("YAY");
+    if (!file) {
       return;
     }
-    setFile(fileParam);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      fetch("/app/api/", { method: "POST", body: formData });
+    } catch (error) {
+      console.log("Error uploading");
+    }
+    
+  };
+
+  const processFile = (acceptedFiles) => {
+    if (acceptedFiles[0].type === "video/mp4") {
+      setFile(acceptedFiles[0]);
+    } else {
+      alert("Please upload a mp4 video file");
+    }
   };
 
   return (
@@ -27,15 +38,10 @@ export default function RecordingPage() {
               Your browser does not support the video tag.
             </video>
             <div className="flex w-[100px] justify-between">
-              <button
-                className="btn"
-                onClick={() => {
-                  setFile(null);
-                }}
-              >
+              <button className="btn" onClick={() => { setFile(null) }}>
                 Reset
               </button>
-              <button className="btn" onClick={() => {}}>
+              <button className="btn" onClick={() => handleUpload()}>
                 Submit
               </button>
             </div>

@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 
 export default function RecordingPage() {
   const [file, setFile] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+
   const { user, isLoading } = useUser();
   if (isLoading) return <p>Loading</p>;
 
@@ -28,8 +30,8 @@ export default function RecordingPage() {
 
   const processFile = (acceptedFiles) => {
     if (acceptedFiles.type === "video/mp4") {
+      console.log(acceptedFiles);
       setFile(acceptedFiles);
-      handleUpload();
     } else {
       alert("Please upload a mp4 video file");
     }
@@ -37,6 +39,15 @@ export default function RecordingPage() {
 
   return (
     <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+      <input
+        type="checkbox"
+        onClick={() => {
+          setIsRecording((e) => !e);
+        }}
+        onChange={() => {}}
+        checked={isRecording}
+        className="toggle"
+      />
       {file ? (
         <>
           <div className="flex flex-col items-center">
@@ -44,7 +55,17 @@ export default function RecordingPage() {
               <source src={URL.createObjectURL(file)} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-            <div className="flex w-[100px] justify-between">
+            <button
+              onClick={async () => {
+                console.log(file);
+                let x = await file.arrayBuffer();
+                console.log(x);
+              }}
+              className="btn btn-success"
+            >
+              Who Am I
+            </button>
+            <div className="flex justify-between">
               <button
                 className="btn"
                 onClick={() => {
@@ -59,9 +80,10 @@ export default function RecordingPage() {
             </div>
           </div>
         </>
-      ) : (
-        // <FileDrop processFile={processFile} />
+      ) : isRecording ? (
         <Recorder processFile={processFile} />
+      ) : (
+        <FileDrop processFile={processFile} />
       )}
     </div>
   );

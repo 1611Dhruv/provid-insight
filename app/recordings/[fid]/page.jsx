@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Link, Button, Element, Events, animateScroll as scroll, scrollSpy } from 'react-scroll';
-import ScrollableComponent from "@/components/Carousel";
+import ScrollableComponent from "@/components/ScrollingComponent";
 import { scroller } from 'react-scroll';
 
 export default function ViewResult({ params }) {

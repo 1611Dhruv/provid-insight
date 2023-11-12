@@ -23,8 +23,8 @@ export default function LandingPage() {
         Get Started
       </Link>
 
-      <div className="flex">
-        <div className="card w-96 bg-base-100 shadow-xl mx-4">
+      <div className = "grid grid-cols-1 md:grid-cols-2 flex">
+        <div className="card w-96 bg-base-100 shadow-xl mx-4 mb-7">
           <div className="card-body">
             <h2 className="card-title">
               Upload a video and let us analyze your presentation skills
@@ -36,7 +36,7 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-        <div className="card w-96 bg-base-100 shadow-xl mx-4">
+        <div className="card w-96 bg-base-100 shadow-xl mx-4 mb-7">
           <div className="card-body">
             <h2 className="card-title">
               Get fast feedback in many categories, with timestamps

@@ -95,7 +95,13 @@ export default function ViewResult({ params }) {
     }
   };
   return (
-    <div>
+    <div className="mt-10 flex flex-col items-center">
+    <div className="grid grid-cols-1 md:grid-cols-3 w-4/5 p-4 mx-auto text-center">
+
+    <div className="mockup-browser border bg-slate-300 col-span-2">
+      <div className="mockup-browser-toolbar">
+        <div className="input">My Video</div>
+      </div>
       <video
         ref={videoRef}
         onTimeUpdate={handleTimeChange}
@@ -104,19 +110,41 @@ export default function ViewResult({ params }) {
       >
         <source src={url} />
       </video>
-      <div>
+      <div className="overflow-y-auto h-[100px] my-7 px-8 rounded-md">
         {Object.keys(timestamps).map((key) => {
           return (
             <span
               key={key}
-              className={`${currKey == key ? "bg-yellow-200" : null}`}
+              className={`${currKey == key ? "bg-yellow-200" : null} `}
             >
               {timestamps[key].transcript}
             </span>
           );
         })}
       </div>
-      <div>{currKey && timestamps[currKey].feedback}</div>
+    </div>
+
+    <div>
+    <div class="h-96 w-3/4 carousel carousel-vertical rounded-box mb-7 bg-slate-50">
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+    </div>
+    <div class="w-3/4">
+      <p className="font-semibold">Summary stuff blegh</p>
+    </div>
+
+    </div>
+    </div>
     </div>
   );
 }

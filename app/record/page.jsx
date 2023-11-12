@@ -1,9 +1,12 @@
 "use client";
 import FileDrop from "@/components/FileDrop";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect, useRef, useState } from "react";
 
 export default function RecordingPage() {
   const [file, setFile] = useState(null);
+  const { user, isLoading } = useUser();
+  if (isLoading) return <p>Loading</p>;
 
   const handleUpload = () => {
     if (!file) {
@@ -12,12 +15,14 @@ export default function RecordingPage() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      console.log(formData);
-      fetch("/api/", { method: "POST", body: formData });
+      formData.append(
+        "user",
+        JSON.stringify({ name: user.name, email: user.email })
+      );
+      fetch("/api/upload", { method: "POST", body: formData });
     } catch (error) {
       console.log("Error uploading");
     }
-    
   };
 
   const processFile = (acceptedFiles) => {
@@ -38,7 +43,12 @@ export default function RecordingPage() {
               Your browser does not support the video tag.
             </video>
             <div className="flex w-[100px] justify-between">
-              <button className="btn" onClick={() => { setFile(null) }}>
+              <button
+                className="btn"
+                onClick={() => {
+                  setFile(null);
+                }}
+              >
                 Reset
               </button>
               <button className="btn" onClick={() => handleUpload()}>

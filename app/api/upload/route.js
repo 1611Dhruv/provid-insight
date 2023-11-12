@@ -6,6 +6,7 @@ const MongoClient = mongodb.MongoClient;
 const url = "mongodb+srv://lliangthomas:1JXpWCXDBSoZOp0S@madhackscluster.9ecahxo.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(url);
 const dbName = "MadHacksDB";
+const colName = "Users";
 
 export async function POST(req) {
   try {
@@ -22,13 +23,20 @@ export async function POST(req) {
     const bucket = new mongodb.GridFSBucket(db);
     const id = new mongodb.ObjectId();
 
-    
+    const collection = db.collection(colName);
+    collection.insertOne({
+      user: email,
+      fid: id,
+      fname: file.name,
+      score: "",
+      description: ""
+    })
   
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const stream = Readable.from(buffer);
-    stream.pipe(bucket.openUploadStreamWithId(id, {
-        metadata: { field: 'myField', value: 'myValue' }
+    stream.pipe(bucket.openUploadStreamWithId(id, file.name, {
+        metadata: { user: email }
     }));
   } catch (err) {
     console.log(err.stack);

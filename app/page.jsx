@@ -4,17 +4,13 @@ import { faFileLines, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { LoadingOverlay } from "@mantine/core";
+import BouncingDotsLoader from "@/components/BouncingDotsLoader";
 export default function Home() {
   const { user, isLoading } = useUser();
-  return isLoading ? (
-    <LoadingOverlay
-      className="w-screen h-screen"
-      visible={isLoading}
-      zIndex={1000}
-      overlayProps={{ radius: "sm", blur: 2 }}
-    />
-  ) : (
+  if (isLoading || !user) {
+    return <BouncingDotsLoader />;
+  }
+  return (
     <div>
       <div className="mt-20 flex flex-col items-center">
         <h1 className="text-6xl text-center font-bold mb-10 backdrop:blur-lg">

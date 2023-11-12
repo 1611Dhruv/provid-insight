@@ -25,7 +25,7 @@ export async function GET(req) {
     
     const arr = await cursor.toArray()    
     return Response.json({ data:arr })
-    
+
   } catch (err) {
     console.log(err.stack);
   }

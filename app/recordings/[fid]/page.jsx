@@ -14,6 +14,13 @@ import { scroller } from "react-scroll";
 
 export default function ViewResult({ params }) {
   const url = "/compressed.mp4"; // updated to have fid
+  // const [data,setData] = useState(null);
+
+  // useEffect(()=>{
+  //   fetch("/api/download?fid="+params.fid).then((data)=>data.json()).then((resp)=>{
+  //     console.log(resp);
+  //   })
+  // },[])
   // const url = params.fid;
   const data = {
     timestamps: {

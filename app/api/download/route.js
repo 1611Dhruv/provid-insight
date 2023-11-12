@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
 import { getSession } from '@auth0/nextjs-auth0';
 import { Readable } from "stream";
+import fs from 'fs';
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
 
 const url = "mongodb+srv://lliangthomas:1JXpWCXDBSoZOp0S@madhackscluster.9ecahxo.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(url);
 const dbName = "MadHacksDB";
-const colName = "Users";
+const colName = "fs.files";
 
 export async function GET(req) {
   try {
+    const params = req.nextUrl.searchParams;
+    const paramFid = new mongodb.ObjectId(params.get("fid"));
+    
     const { user } = await getSession();
     if (!user) {
       return Response.json({ success: false });
@@ -18,15 +22,21 @@ export async function GET(req) {
 
     await client.connect();
     const db = client.db(dbName);
+    const bucket = new mongodb.GridFSBucket(db);
 
     const cursor = db.collection(colName).find({
-      user: user.email
+        _id: paramFid,
+        metadata: { user: user.email }
     });
     
-    const arr = await cursor.toArray()
-    console.log(arr)
+    const arr = await cursor.toArray();
+    if (arr === null) {
+        return Response.json({err:err},{status:404})
+    }
+    bucket.openDownloadStream(paramFid)
+        .pipe(fs.createWriteStream("data/" + params.get("fid") + ".mp4"));
     
-    return Response.json({ data:arr })
+    return Response.json({ data:arr },{status:200})
   } catch (err) {
     console.log(err.stack);
   }

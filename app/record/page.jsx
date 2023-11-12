@@ -39,15 +39,19 @@ export default function RecordingPage() {
 
   return (
     <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-      <input
-        type="checkbox"
-        onClick={() => {
-          setIsRecording((e) => !e);
-        }}
-        onChange={() => {}}
-        checked={isRecording}
-        className="toggle"
-      />
+      <div className="flex justify-evenly mb-5 w-[720px]">
+        <p>Upload</p>
+        <input
+          type="checkbox"
+          onClick={() => {
+            setIsRecording((e) => !e);
+          }}
+          onChange={() => {}}
+          checked={isRecording}
+          className="toggle "
+        />
+        <p>Record</p>
+      </div>
       {file ? (
         <>
           <div className="flex flex-col items-center">
@@ -55,7 +59,7 @@ export default function RecordingPage() {
               <source src={URL.createObjectURL(file)} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-            <button
+            {/* <button
               onClick={async () => {
                 console.log(file);
                 let x = await file.arrayBuffer();
@@ -64,7 +68,7 @@ export default function RecordingPage() {
               className="btn btn-success"
             >
               Who Am I
-            </button>
+            </button> */}
             <div className="flex justify-between">
               <button
                 className="btn"

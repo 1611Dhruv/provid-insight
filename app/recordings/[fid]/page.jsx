@@ -1,133 +1,35 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import {
-  Link,
-  Button,
-  Element,
-  Events,
-  animateScroll as scroll,
-  scrollSpy,
-} from "react-scroll";
 import ScrollableComponent from "@/components/ScrollingComponent";
-import { scroller } from "react-scroll";
 
 export default function ViewResult({ params }) {
   // const url = "/compressed.mp4"; // updated to have fid
   const [api_dat, setApiDat] = useState(null);
   // const url = "/api/download?fid=" + params.fid;
   const [blob, setBlob] = useState(null);
+
+  const [currKey, setCurrKey] = useState(null);
+  const videoRef = useRef(null);
   // },[])
   useEffect(() => {
     fetch("/api/download_video?fid=" + params.fid)
       .then((r) => r.blob())
       .then((blob) => {
-        console.log(blob);
         setBlob(blob);
       });
     fetch("/api/download_data?fid=" + params.fid)
-      .then((r) => r.blob())
+      .then((r) => r.json())
       .then((data) => {
         console.log(data);
         setApiDat(data);
       });
   }, []);
-  const data = {
-    timestamps: {
-      "0.0-7.28": {
-        feedback:
-          "test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1",
-        transcript:
-          " So first, we start off with the spinal cord, which leads up toward the brain.",
-      },
-      "7.28-15.32": {
-        feedback:
-          "test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1",
-        transcript:
-          " As it goes closer to the brain, it expands and swells and becomes the brain stem.",
-      },
-      "15.32-25.44": {
-        feedback:
-          "test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1",
-        transcript:
-          " At the top of the brain stem sits the thalamus, and right under the thalamus lies the hypothalamus,",
-      },
-      "25.44-43.88": {
-        feedback:
-          "test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1",
-        transcript:
-          " hypo meaning under or lower, and under the hypothalamus is the pituitary gland.",
-      },
-      "43.88-53.24": {
-        feedback:
-          "ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2",
-        transcript:
-          " Going around from both sides of the thalamus is the hippocampus that extends out to the",
-      },
-      "53.24-62.4": {
-        feedback:
-          "ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2ilove2",
-        transcript:
-          " front of the brain, and at the front ends of the brain is the amygdala, and on the other",
-      },
-      "62.4-72.56": {
-        feedback:
-          "3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool",
-        transcript:
-          " side inside the temporal lobe lies the other hippocampus and amygdala pair.",
-      },
-      "72.56-80.04": {
-        feedback:
-          "3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool",
-        transcript:
-          " So for the lobes, at the front you have the frontal lobe, and at the top the parietal",
-      },
-      "80.04-82.32": {
-        feedback:
-          "3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool",
-        transcript: " lobe, and at the back the occipital lobe.",
-      },
-      "82.32-86.36": {
-        feedback:
-          "3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool",
-        transcript: " The bottom, the yellow, is the temporal lobe.",
-      },
-      "86.36-97.2": {
-        feedback:
-          "3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool 3issocool",
-        transcript:
-          " For the cortexes, the cortex in the frontal lobe is the motor cortex, and that sits at",
-      },
-      "97.2-101.52": {
-        feedback:
-          "imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz",
-        transcript: " the end of the frontal lobe.",
-      },
-      "101.52-109.12": {
-        feedback:
-          "imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz",
-        transcript:
-          " At the front of the parietal lobe sits the sensory cortex, and these two cortexes border",
-      },
-      "109.12-112.56": {
-        feedback:
-          "imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz",
-        transcript: " each other.",
-      },
-      "112.56-122.28": {
-        feedback:
-          "imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz imsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedozimsogloedoz",
-        transcript:
-          " Lastly we have the cerebellum, which is under all the lobes and sits behind the brain stem.",
-      },
-    },
-    summary: "summary",
-    score: { score: 1 },
-  };
+  if (api_dat == null) {
+    return <p></p>;
+  }
+  const data = api_dat.data;
   const timestamps = data.timestamps;
-  console.log(timestamps);
-  const [currKey, setCurrKey] = useState(Object.keys(timestamps)[0]);
-  const videoRef = useRef(null);
 
   const feedbackSet = new Set();
   for (const key in data.timestamps) {
@@ -136,7 +38,6 @@ export default function ViewResult({ params }) {
     feedbackSet.add(feedback);
   }
   const feedbackList = Array.from(feedbackSet);
-  console.log(feedbackList);
 
   const transcriptList = [];
   for (const key in data.timestamps) {
@@ -213,7 +114,7 @@ export default function ViewResult({ params }) {
       <div class="w-11/12 bg-slate-100 p-4 border-4 border-slate-400 rounded-md mb-4 indicator">
         <span className="indicator-item badge badge-accent">Summary</span>
         <div>
-          <p className="font-semibold">Summary stuff blegh</p>
+          <p className="font-semibold">{data.summary}</p>
         </div>
       </div>
     </div>

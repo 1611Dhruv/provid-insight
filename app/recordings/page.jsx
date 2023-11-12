@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function RecordingsList() {
   const [data, setData] = useState(null);
+  const [load, setLoad] = useState(0);
   useEffect(() => {
     fetch("/api/load", { method: "GET" })
       .then((res) => res.json())

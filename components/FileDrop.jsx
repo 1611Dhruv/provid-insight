@@ -6,7 +6,7 @@ import Dropzone from "react-dropzone";
 const FileDrop = ({ processFile }) => {
   return (
     <div
-      className="w-[1000px] h-[500px] rounded-3xl hover:bg-[#F9F9F9] transition-colors border-[2px] border-dashed flex justify-center items-center align-middle"
+      className="w-[720px] h-[400px] rounded-3xl hover:bg-[#F9F9F9] transition-colors border-[2px] border-dashed flex justify-center items-center align-middle"
       // onClick={(e) => e.stopPropagation()}
     >
       <Dropzone onDrop={(acceptedFiles) => processFile(acceptedFiles[0])}>

@@ -6,7 +6,8 @@ import ScrollableComponent from "@/components/ScrollingComponent";
 import { scroller } from 'react-scroll';
 
 export default function ViewResult({ params }) {
-  const url = "/compressed.mp4"; // updated to have fid
+  // const url = "/compressed.mp4"; // updated to have fid
+  const url = params.fid;
   const data = {
     timestamps: {
       "0.0-7.28": {

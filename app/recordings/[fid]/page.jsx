@@ -143,17 +143,37 @@ export default function ViewResult({ params }) {
     feedbackSet.add(feedback);
   }
   const feedbackList = Array.from(feedbackSet);
+  console.log(feedbackList);
+  // Somewhere else, even another file
+  const scrollTo = (element) =>
+    scroller.scrollTo(element, {
+      duration: 750,
+      delay: 100,
+      smooth: true,
+      containerId: "feedbackContainer",
+      // offset: 50, // Scrolls to element + 50 pixels down the page
+      // ... other options
+    });
+
+  // const scrollTo = () => {
+  //   scroll.scrollTo(100); // Scrolling to 100px from the top of the page.
+  // };
 
   const spanRef = useRef([]);
+  const addToRefs = (el) => {
+    if (el && !spanRef.current.includes(el)) {
+      spanRef.current.push(el);
+    }
+  };
 
-  // const scrollSpan = (index) => {
-  //   console.log(index);
-  //   if (spanRef[index]) {
-  //     spanRef[index].current.scrollIntoView({
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // };
+  const scrollSpan = (index) => {
+    console.log(index);
+    if (spanRef.current[index]) {
+      spanRef.current[index].scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
 
   // const transcriptList = [];
   // for (const key in data.timestamps) {
@@ -230,9 +250,7 @@ export default function ViewResult({ params }) {
               return (
                 <span
                   key={key}
-                  ref={
-                    spanRef[transcriptList.indexOf(timestamps[key].transcript)]
-                  }
+                  ref={addToRefs}
                   id={`timestamp-${key}`}
                   className={`${currKey == key ? "bg-yellow-200" : null}`}
                   onClick={() => scrollToHighlightedElement(key)}

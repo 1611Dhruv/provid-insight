@@ -5,6 +5,7 @@ import { useRef, useEffect } from "react";
 const FileDrop = ({ processFile }) => {
   const fileInput = useRef(null);
   const dropzone = useRef(null);
+
   const handleSelection = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -14,10 +15,18 @@ const FileDrop = ({ processFile }) => {
     processFile(file);
   };
 
-  // Adds event handlers for the used references
   useEffect(() => {
-    // simulates clicking the file
-    dropzone.current.addEventListener("click", () => fileInput.current.click());
+    // Prevents the default behavior of the dropzone click event
+    const preventDefaultClick = (e) => {
+      if (e.target !== fileInput.current) {
+        e.preventDefault();
+        fileInput.current.click();
+      }
+    };
+
+    dropzone.current.addEventListener("click", preventDefaultClick);
+
+    return () => {};
   }, []);
 
   return (

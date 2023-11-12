@@ -17,14 +17,14 @@ export default function LandingPage() {
         Get Started
       </Link>
 
-      <div className = "flex">
-      <div className="card w-96 bg-base-100 shadow-xl mx-4">
+      <div className = "grid grid-cols-1 md:grid-cols-2 flex">
+      <div className="card w-96 bg-base-100 shadow-xl mx-4 mb-7">
         <div className="card-body">
           <h2 className="card-title">Upload a video and let us analyze your presentation skills</h2>
           <p>It's as easy as it sounds. Whether you're grappling with social anxiety or seeking a space for continuous improvement, our platform has your back.</p>
         </div>
       </div>
-      <div className="card w-96 bg-base-100 shadow-xl mx-4">
+      <div className="card w-96 bg-base-100 shadow-xl mx-4 mb-7">
         <div className="card-body">
           <h2 className="card-title">Get fast feedback in many categories, with timestamps</h2>
           <p>Navigate through your video to pinpoint specific moments for in-depth analysis. Not only do we offer a convenient summary feature, you can track your progress over time.</p>

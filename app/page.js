@@ -7,13 +7,14 @@ import Link from "next/link";
 export default function Home() {
   const userName = "Josh";
   return (
+    <div>
     <div className="mt-20 flex flex-col items-center">
       <h1 className="text-6xl text-center font-bold mb-10 backdrop:blur-lg">
         Welcome Back, {userName}
       </h1>
 
-      <div className = "flex mb-14">
-      <div className="card w-96 bg-base-100 shadow-xl mx-4">
+      <div className = "grid grid-cols-1 md:grid-cols-2 flex mb-14">
+      <div className="card flex w-96 bg-base-100 shadow-xl mx-4 mb-5">
         <div className="card-body">
           <Link href={"/record"}>
               <div className=" rounded-full border-[1px] p-5 items-center border-black">
@@ -26,7 +27,7 @@ export default function Home() {
           <p>Whether it's a prepared speech or a demonstration, this is your space to shine.</p>
         </div>
       </div>
-      <div className="card w-96 bg-base-100 shadow-xl mx-4">
+      <div className="card flex w-96 bg-base-100 shadow-xl mx-4 mb-5">
         <div className="card-body">
         <Link href={"/recordings"}>
               <div className=" rounded-full border-[1px] p-5 items-center border-black">
@@ -38,6 +39,19 @@ export default function Home() {
             </Link>
           <p>Review and learn from your previous recordings.</p>
         </div>
+      </div>
+      
+      </div>
+
+      </div>
+
+
+      <div class="w-3/5 p-4 mx-auto text-center">
+      <div className="chat chat-start">
+        <div className="chat-bubble">It's a highlight reel of my speaking career.</div>
+      </div>
+      <div className="chat chat-end">
+        <div className="chat-bubble">Feeling exposed, <br/>but in a good way!</div>
       </div>
       </div>
 

@@ -10,21 +10,21 @@ export const Navbar = () => {
     <div className="navbar">
       <div className="navbar-start">
         <Link href={"/landing"}>
-          <Image src={"/smileBuckyWhite.png"} width={50} height={50}></Image>
+          <Image src={"/bucky.png"} width={50} height={50}></Image>
         </Link>
       </div>
       {user ? (
         <div className="navbar-center flex-none">
-          <Link className="btn btn-ghost mx-4" href="/">
+          <Link className="btn btn-ghost mx-4 normal-case" href="/">
             Home
           </Link>
-          <Link className="btn btn-ghost mx-4" href="/record">
+          <Link className="btn btn-ghost mx-4 normal-case" href="/record">
             Upload/Record
           </Link>
-          <Link className="btn btn-ghost mx-4" href="/recordings">
+          <Link className="btn btn-ghost mx-4 normal-case" href="/recordings">
             View My Videos
           </Link>
-          <Link className="btn btn-ghost mx-4" href="/summary">
+          <Link className="btn btn-ghost mx-4 normal-case" href="/summary">
             Summary
           </Link>
           <Link href={"/login"}></Link>
@@ -32,11 +32,11 @@ export const Navbar = () => {
       ) : null}
       <div className="navbar-end">
         {user ? (
-          <Link className="btn btn-ghost mx-4" href={"/api/auth/logout"}>
+          <Link className="btn btn-ghost mx-4 normal-case" href={"/api/auth/logout"}>
             Logout
           </Link>
         ) : (
-          <Link className="btn btn-ghost mx-4" href={"/api/auth/login"}>
+          <Link className="btn btn-ghost mx-4 normal-case" href={"/api/auth/login"}>
             Login
           </Link>
         )}

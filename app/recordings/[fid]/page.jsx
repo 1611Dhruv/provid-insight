@@ -107,7 +107,7 @@ export default function ViewResult({ params }) {
           className="ml-4 w-11/12 px-4 py-4 text-left bg-slate-300 rounded-lg h-fit"
           style={{ alignSelf: "center" }}
         >
-          <BarGraph data={Object.entries(data.score)} />
+          <BarGraph data={data.score} />
           <ScrollableComponent
             data={feedbackList.map((e) => (
               <div

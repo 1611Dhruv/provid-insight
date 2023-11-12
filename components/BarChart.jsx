@@ -33,17 +33,28 @@ import {
 // ];
 
 const BarGraph = ({ data }) => {
+  console.log(data)
+  const arr = []
+  for(let key in data){
+    if(key==="filler_words_count"){
+      continue
+    }
+    arr.push({name: key,val:data[key]})
+  }
+  arr[arr.length-1].val=Math.ceil(arr[arr.length-1].val*100)
+  arr[arr.length-1].name = "Filler Words %"
+  console.log(arr)
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart
-        data={data}
-        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        data={arr}
+        margin={{ top: 10, right: 20, left: 10, bottom: 5 }}
       >
-        <XAxis dataKey="name" />
+        <XAxis dataKey="name" angle={-45} dy={-10} />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="score" fill="#8884d8" />
+        <Bar dataKey="val" fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>
   );

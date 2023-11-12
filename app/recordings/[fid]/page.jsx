@@ -108,6 +108,20 @@ export default function ViewResult({ params }) {
   // };
 
 
+  const spanRef = Object.keys(timestamps).map(() => useRef(null));
+
+  const scrollSpan = (index) => {
+    console.log(index);
+    if (spanRef[index]) {
+      spanRef[index].current.scrollIntoView();
+    }
+  }
+
+  const transcriptList = []
+  for (const key in data.timestamps) {
+    transcriptList.push(data.timestamps[key].transcript)
+  }
+
   const handleTimeChange = (e) => {
     if (videoRef.current) {
       let x = Object.keys(timestamps).filter((key) => {
@@ -119,6 +133,20 @@ export default function ViewResult({ params }) {
         );
       });
       setCurrKey(x[0]);
+      console.log(x[0]);
+      if(timestamps[x[0]]) {
+        const index = transcriptList.indexOf(timestamps[x[0]].transcript);
+        scrollSpan(index);
+      }
+      // scrollSpan
+      // scrollToHighlightedElement(x[0].);
+    }
+  };
+
+  const scrollToHighlightedElement = (key) => {
+    const element = document.getElementById(`timestamp-${key}`);
+    if (element) {
+      element.scrollIntoView(top);
       if (timestamps[x[0]]) {
         console.log(feedbackList.indexOf(timestamps[x[0]].feedback));
         scrollTo(`feedback_${feedbackList.indexOf(timestamps[x[0]].feedback)}`)  
@@ -143,8 +171,9 @@ export default function ViewResult({ params }) {
   
   // console.log(transcriptMap)
 
+
   return (
-    <div className="mt-10 flex flex-col items-center">
+    <div className="mt-10 flex flex-col items-center ">
     <div className="grid grid-cols-1 md:grid-cols-3 w-4/5 p-4 mx-auto text-center">
 
     <div className="mockup-browser border bg-slate-300 col-span-2">
@@ -155,7 +184,7 @@ export default function ViewResult({ params }) {
         ref={videoRef}
         onTimeUpdate={handleTimeChange}
         controls
-        className="h-[480px]"
+        className="my-4"
       >
         <source src={url} />
       </video>
@@ -164,44 +193,48 @@ export default function ViewResult({ params }) {
           return (
             <span
               key={key}
-              className={`${currKey == key ? "bg-yellow-200" : null} `}
+              ref={spanRef[transcriptList.indexOf(timestamps[key].transcript)]}
+              id={`timestamp-${key}`}
+              className={`${currKey == key ? "bg-yellow-200" : null}`}
+              onClick={() => scrollToHighlightedElement(key)}
             >
+              
               {timestamps[key].transcript}
             </span>
           );
         })}
       </div>
     </div>
-    {/* <ScrollableComponent items={feedbackList} refs={refs} /> */}
-      {/* <div> */}
-        <ScrollableComponent data={feedbackList} containerId={"feedbackContainer"}/>
-      {/* </div> */}
-      {/* <button onClick={() => scrollTo('paragraph2')}>Go to Paragraph 2</button>
 
-      <button onClick={() => scrollTo('paragraph3')}>Go to Paragraph 3</button> */}
+    <div>
+    <div class="w-3/4 ml-7">
 
-    {/* <div> */}
-    {/* <div class="h-96 w-3/4 carousel carousel-vertical rounded-box mb-7 bg-slate-50">
-      {feedbackList.map((item, index) => (
-          <div className="carousel-item h-full px-4 py-4"
-            key={index} 
-            tabIndex="0" 
-            ref={feedbackRefs.current[index]}
-          >
-            {item}
-          </div>
-        ))} */}
+    <ScrollableComponent data={feedbackList} containerId={"feedbackContainer"}/>
 
-      {/* <div className="carousel-item h-full px-4 py-4">
-        <div>{currKey && timestamps[currKey].feedback}</div>
-      </div> */}
-    {/* </div> */}
-    <div class="w-3/4">
+    <div className="truncate px-8 rounded-md font-light">
+        {Object.keys(timestamps).map((key) => {
+          return (
+            <span
+              key={key}
+              className={`${currKey == key ? "font-semibold" : null} `}
+              
+            >
+              {currKey && timestamps[key].feedback}
+            </span>
+          );
+        })}
+      </div>
+
+    </div>
+    
+
+    </div>
+    </div>
+
+    <div class="w-3/4 bg-white mb-7 px-7 py-7">
       <p className="font-semibold">Summary stuff blegh</p>
     </div>
 
     </div>
-    </div>
-    // </div>
   );
 }

@@ -14,7 +14,7 @@ export const Navbar = () => {
         </Link>
       </div>
       {user ? (
-        <div className="navbar-center flex-none">
+        <div className="navbar-center hidden lg:flex">
           <Link className="btn btn-ghost mx-4 normal-case text-med" href="/">
             Home
           </Link>

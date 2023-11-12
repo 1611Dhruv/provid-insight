@@ -12,13 +12,17 @@ DURATION = 30
 SELECTED_FPS = 1
 SYSTEM_PROMPT = """
 You are a public speaking coach. You are coaching a client who will be giving a presentation. 
-You will give concise feedback about specific improvements they can make to their presentation.
+Try to not summarize or describe the presentation but instead give feedback about possible improvements.
 You will be given a transcript and frames from the video of the presentation.
 Do not comment on enunciation, pronunciation, or audio tone because that will not be available to you.
+Your output should be formatted as a paragraph and DO NOT include any extra information that is not in the transcript or video.
+Pretend you are watching the presentation live and give feedback as if you were there.
+For example, do not respond with phrases like "from the frames provided", "from the transcript provided", etc.
 """
 USER_PROMPT = """
-{context} Please critique and evaluate this short excerpt of my presentation. 
-Please be concise and keep your output to 50 words or less. 
+{context} Please critique this short excerpt of my presentation.
+Make sure to comment its the content and accuracy.
+Please be concise and keep your output to 100 words or less. 
 The transcript may be cutoff in the middle of a sentence, so don't worry about unfinished sentences.
 Here is the transcript and video.
 
@@ -64,17 +68,33 @@ def split_frames(frames: list[bytes], fps: int) -> list[list[bytes]]:
 
 async def get_transcript(audio_link: str):
     print(f"generating transcript at {time.strftime('%X')}")
-
+    filler_words = "Umm, let me think like, hmm... Okay, here's what I'm, like, thinking."
     audio_file = open(audio_link, "rb")
-    transcript = await client.audio.transcriptions.create(
-        model="whisper-1",
-        file=audio_file,
-        response_format="verbose_json",
+
+    async def get_filler_words_transcript():
+        return await client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file,
+            response_format="verbose_json",
+            prompt=filler_words,
+        )
+
+    async def get_clean_transcript():
+        return await client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file,
+            response_format="verbose_json",
+        )
+
+    # Run both requests in parallel
+    filler_words_transcript, clean_transcript = await asyncio.gather(
+        get_filler_words_transcript(),
+        get_clean_transcript()
     )
 
     print(f"finished transcript at {time.strftime('%X')}")
 
-    return transcript
+    return filler_words_transcript, clean_transcript
 
 
 def parse_video(video_link: str) -> tuple[list[bytes], int]:
@@ -128,6 +148,7 @@ async def get_vision_completion(
         "model": "gpt-4-vision-preview",
         "messages": prompt_messages,
         "max_tokens": 200,
+        "temperature": 1,
     }
 
     result = await client.chat.completions.create(**params)
@@ -163,28 +184,33 @@ async def get_annotations(video_link: str, transcript, context: str) -> list[str
     return result
 
 
-# FILTER_PROMPT_1 = """
-# Can you rewrite these paragraphs using a conversational tone by only including the suggestions that each paragraph makes?
+FILTER_PROMPT_1 = """
+Can you condense each paragraph down? I want something clear and straightforward, but try to keep as much information as possible.
 
-# Please use this format for your output:
-# \"""
-# {{paragraph 1}}
+Please use this format for your output and keep each paragraph separate:
+\"""
+{{paragraph 1}}
+{{paragraph 2}}
+{{paragraph 3}}
+continue...
+\"""
 
-# {{paragraph 2}}
-
-# {{paragraph 3}}
-# \"""
-
-# Here are the paragraphs:
-# \"""
-# {annotations}
-# \""
-# """
+Here are the paragraphs:
+\"""
+{annotations}
+\"""
+"""
 
 FILTER_PROMPT_2 = """
-Can you edit each of these paragraphs by removing any duplicate information between them? 
-For example, if two paragraphs mention the same thing, only include it once.
+Can you edit each of these paragraphs by removing any duplicate information or repetitive language between them?
+If two paragraphs reuse the same term or phrase, include it only once.
 Also remove any overall or general feedback.
+DO NOT add any extra information that is not in the feedback.
+For example, these two sentences are very similar and should be removed:
+\"""
+"Your use of a visual aid to illustrate the anatomy of the brain is effective"
+"Your use of a physical model to explain the different parts of the brain is an excellent visual aid"
+\"""
 
 Please use this format for your output and keep each paragraph separate:
 \"""
@@ -204,22 +230,22 @@ Here are the paragraphs:
 async def filter_annotations(annotations: list[str]) -> list[str]:
     print(f"started filtering annotations {time.strftime('%X')}")
 
-    # messages = [{"role": "system", "content": "You are a helpful assistant."}]
-    # messages.append(
-    #     {
-    #         "role": "user",
-    #         "content": FILTER_PROMPT_1.format(annotations="\n\n".join(annotations)),
-    #     }
-    # )
+    messages = [{"role": "system", "content": "You are a helpful assistant."}]
+    messages.append(
+        {
+            "role": "user",
+            "content": FILTER_PROMPT_1.format(annotations="\n\n".join(annotations)),
+        }
+    )
 
-    # first_filter_result = await client.chat.completions.create(
-    #     model="gpt-3.5-turbo-1106",
-    #     messages=messages,
-    # )
+    first_filter_result = await client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=messages,
+    )
 
-    # first_filter_result = clean_output(first_filter_result.choices[0].message.content)
+    first_filter_result = clean_output(first_filter_result.choices[0].message.content)
 
-    first_filter_result = "\n\n".join(annotations)
+    # first_filter_result = "\n\n".join(annotations)
 
     messages = [{"role": "system", "content": "You are a helpful assistant."}]
     messages.append(
@@ -246,12 +272,15 @@ def clean_output(text: str) -> str:
 
 
 SUMMARY_PROMPT = """
-I just did a presentation and received a lot of feedback! Can you summarize this feedback to these five metrics? 
+I just did a presentation and received a lot of feedback! Can you summarize and rewrite this feedback as if it were your own? Try to use the following categories in your feedback.
 
 Content, Reasoning, Organization, Style, Mechanics
 
-You can also add extra feedback either based on the summary or by looking through the transcript of my presentation. 
-Don't mention the transcript specifically in the summary. 
+You can also add extra feedback either based on the summary or by looking through the transcript of my presentation. Don't mention the transcript specifically in the summary. 
+Use the transcript I provided to see if I used a lot of filler words. Please give feedback if I did and list what filler words I used.
+Do not comment on enunciation, pronunciation, or audio tone because that will not be available to you.
+Be as concise as possible and do not add any extra information that is not in the feedback or transcript.
+Begin your feedback with \"""Feedback on Presentation\"""
 Please use a conversational but professional tone.
 
 Here are some metrics to use (ignore non-applicable bullet points):
@@ -277,7 +306,6 @@ Mechanics
 -Fluency (complete sentences, with no filled pauses (uh, like, well, okay?)
 -Hand and arm gestures, body movement, with no fidgeting
 -Use of visual aids (chalkboard, computer graphics, etc.)
--Voice control (pitch, loudness, speed, clear enunciation)
 
 transcript:
 \"""
@@ -337,6 +365,18 @@ async def generate_summary(annotations: list[str], transcript) -> str:
     score = score.replace("```json\n", "").replace("\n```", "")
     score = json.loads(score)
 
+    filler_words = ["um", "uh", "er", "well", "okay", "you know", "basically", "i mean"]
+
+    filler_words_count = sum(
+        [
+            transcript.text.lower().count(word)
+            for word in filler_words
+        ]
+    )
+
+    score["filler_words_count"] = filler_words_count
+    score["filler_words_ratio"] = filler_words_count / len(transcript.text.split(" "))
+
     print(f"finished generating summary {time.strftime('%X')}")
 
     return summary, score
@@ -345,22 +385,35 @@ async def generate_summary(annotations: list[str], transcript) -> str:
 def generate_json(
     filtered_annotations: list[str], transcript, summary: str, score: dict
 ):
-    output_dict = {}
-    start_time = 0
-    for line in filtered_annotations:
-        selected_transcript = ""
-
-        for seg in transcript.segments:
-            if seg["start"] >= start_time and start_time + DURATION >= seg["start"]:
-                selected_transcript += seg["text"]
-
-        output_dict[f"{start_time}-{start_time + DURATION}"] = {
-            "feedback": line,
-            "transcript": selected_transcript,
+    timestamps = {}
+    annotation_index = 0
+    time = 0
+    for seg in transcript.segments:
+        if seg["start"] >= time + DURATION:
+            annotation_index += 1
+            annotation_index = min(annotation_index, len(filtered_annotations) - 1)
+            time += DURATION
+        timestamps[f"{round(seg['start'], 2)}-{round(seg['end'], 2)}"] = {
+            "feedback": filtered_annotations[annotation_index],
+            "transcript": seg['text'],
         }
 
-        start_time += DURATION
+    # for line in filtered_annotations:
+    #     selected_transcript = ""
 
+    #     for seg in transcript.segments:
+    #         if seg["start"] >= start_time and start_time + DURATION >= seg["start"]:
+    #             selected_transcript += seg["text"]
+
+    #     timestamps[f"{start_time}-{start_time + DURATION}"] = {
+    #         "feedback": line,
+    #         "transcript": selected_transcript,
+    #     }
+
+    #     start_time += DURATION
+
+    output_dict = {}
+    output_dict["timestamps"] = timestamps
     output_dict["summary"] = summary
     output_dict["score"] = score
 
@@ -373,23 +426,24 @@ async def main() -> None:
     """
 
     video_link = "../data/compressed.mp4"
-    audio_link = "../data/compressed.mp3"
+    # audio_link = "../data/compressed.mp3"
 
-    # transcript = await get_transcript(audio_link)
-    # annotations = await get_annotations(video_link, transcript, context)
-    parse_video(video_link)
+    filler_words_transcript, clean_transcript  = await get_transcript(video_link)
+    annotations = await get_annotations(video_link, clean_transcript, context)
 
-    # filtered_annotations = await filter_annotations(annotations)
-    # summary, score = await generate_summary(annotations, transcript)
+    print(annotations)
 
-    # print(
-    #     generate_json(
-    #         filtered_annotations,
-    #         transcript,
-    #         summary,
-    #         score,
-    #     )
-    # )
+    filtered_annotations = await filter_annotations(annotations)
+    summary, score = await generate_summary(filtered_annotations, filler_words_transcript)
+
+    print(
+        generate_json(
+            filtered_annotations,
+            clean_transcript,
+            summary,
+            score,
+        )
+    )
 
 
 asyncio.run(main())

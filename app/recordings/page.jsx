@@ -16,6 +16,7 @@ export default function RecordingsList() {
         console.log(data);
         let x = data.data.map((node) => {
           return {
+            img: node.data.image,
             uploadTime: node.ftime,
             filename: node.fname,
             score: node.score,

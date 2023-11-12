@@ -10,7 +10,7 @@ export const Navbar = () => {
     <div className="navbar">
       <div className="navbar-start ml-4">
         <Link href={"/landing"}>
-          <Image src={"/bucky.png"} width={50} height={50}></Image>
+          <Image src={"/bucky.png"} width={50} height={50} alt="badger logo"></Image>
         </Link>
       </div>
       {user ? (

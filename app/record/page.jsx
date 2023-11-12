@@ -1,28 +1,35 @@
 "use client";
 import FileDrop from "@/components/FileDrop";
+import Recorder from "@/components/Recorder";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect, useRef, useState } from "react";
 
 export default function RecordingPage() {
   const [file, setFile] = useState(null);
+  const { user, isLoading } = useUser();
+  if (isLoading) return <p>Loading</p>;
 
   const handleUpload = () => {
-    console.log("YAY");
     if (!file) {
       return;
     }
     try {
       const formData = new FormData();
       formData.append("file", file);
-      fetch("/api/", { method: "POST", body: formData });
+      formData.append(
+        "user",
+        JSON.stringify({ name: user.name, email: user.email })
+      );
+      fetch("/api/upload", { method: "POST", body: formData });
     } catch (error) {
       console.log("Error uploading");
     }
-    
   };
 
   const processFile = (acceptedFiles) => {
-    if (acceptedFiles[0].type === "video/mp4") {
-      setFile(acceptedFiles[0]);
+    if (acceptedFiles.type === "video/mp4") {
+      setFile(acceptedFiles);
+      handleUpload();
     } else {
       alert("Please upload a mp4 video file");
     }
@@ -38,7 +45,12 @@ export default function RecordingPage() {
               Your browser does not support the video tag.
             </video>
             <div className="flex w-[100px] justify-between">
-              <button className="btn" onClick={() => { setFile(null) }}>
+              <button
+                className="btn"
+                onClick={() => {
+                  setFile(null);
+                }}
+              >
                 Reset
               </button>
               <button className="btn" onClick={() => handleUpload()}>
@@ -48,7 +60,8 @@ export default function RecordingPage() {
           </div>
         </>
       ) : (
-        <FileDrop processFile={processFile} />
+        // <FileDrop processFile={processFile} />
+        <Recorder processFile={processFile} />
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
 const fs = require('fs');
+const { Readable } =  require('stream')
 
 const url = "mongodb+srv://lliangthomas:1JXpWCXDBSoZOp0S@madhackscluster.9ecahxo.mongodb.net/?retryWrites=true&w=majority";
 
@@ -13,12 +14,14 @@ export async function POST(req) {
         const db = client.db(dbName);
         const bucket = new mongodb.GridFSBucket(db);
         const id = new mongodb.ObjectId();
-        console.log(req.body)
+        const body = await req;
+        console.log(body);
         const timeN = new Date();
-        const stream = req.body;
-        fs.stream.pipe(bucket.openUploadStreamWithId(id, {
-                metadata: {  }
-            }));
+        //stream.pipe();
+        // bucket.openUploadStreamWithId(id, {
+        //     metadata: {  }
+        // })
+        const save = fs.createWriteStream("test.mp4");
         
         // const collection = db.collection("Users");
 

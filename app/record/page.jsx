@@ -13,7 +13,7 @@ export default function RecordingPage() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      fetch("/api/", { method:"POST",body:formData} );
+      fetch("/api/", { method: "POST", body: formData });
     } catch (error) {
       console.log("Error uploading");
     }

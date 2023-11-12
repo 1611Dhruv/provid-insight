@@ -11,7 +11,10 @@ export default function LandingPage() {
         ProVid Insight
       </h1>
       <p className="text-black text-lg text-center mb-7 ml-[15%] mr-[15%]">
-      Embark on a presentation journey that's anything but "insightless" with ProVid Insight! This platform is your backstage pass to the show of refined presentation skills – perfect for those battling butterflies in their stomach or anyone on a quest to master the art of public speaking. ProVid Insight is not just an application; it's your trusted wingman on the stage of self-expression.
+      Embark on a presentation journey that's anything but "insightless" with ProVid Insight! This platform is your backstage pass to the show of refined presentation skills – perfect for those battling butterflies in their stomach or anyone on a quest to master the art of public speaking. ProVid Insight is not just an application; it's your trusted wingman on the stage of self-expression. We provide a supportive environment to practice and receive constructive feedback.
+      </p>
+      <p className="text-black text-xl text-center mb-7 ml-[15%] mr-[15%]">
+      Gradual progress leads to increased comfort in social and professional interactions.
       </p>
       <Link
         href={user ? "/" : "/api/auth/login"}

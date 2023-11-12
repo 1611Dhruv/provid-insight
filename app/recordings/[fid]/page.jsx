@@ -63,7 +63,7 @@ export default function ViewResult({ params }) {
       <div className="grid grid-cols-1 md:grid-cols-3 w-11/12 p-4 mx-auto text-center">
         <div className="mockup-browser border bg-slate-300 col-span-2">
           <div className="mockup-browser-toolbar">
-            <div className="input">My Video</div>
+            <div className="input"></div>
           </div>
           {blob && (
             <video

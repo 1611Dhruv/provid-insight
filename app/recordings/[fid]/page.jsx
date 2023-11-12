@@ -18,14 +18,14 @@ export default function ViewResult({ params }) {
   // const url = "/api/download?fid=" + params.fid;
   const [blob, setBlob] = useState(null);
 
-  // useEffect(()=>{
-  //   fetch("/api/download?fid="+params.fid).then((data)=>data.json()).then((resp)=>{
-  //     console.log(resp)
-  //     setApiDat(resp);
-  //   })
-  // },[])
+  useEffect(()=>{
+    fetch("/api/download_data?fid="+params.fid).then((data)=>data.json()).then((resp)=>{
+      console.log(resp)
+      setApiDat(resp);
+    })
+  },[])
   useEffect(() => {
-    fetch("/api/download?fid=" + params.fid)
+    fetch("/api/download_video?fid=" + params.fid)
       .then((r) => r.blob())
       .then((blob) => {
         console.log(blob);

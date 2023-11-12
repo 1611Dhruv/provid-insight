@@ -2,7 +2,6 @@ import React from "react";
 import { Element } from "react-scroll";
 
 const ScrollableComponent = ({ data, containerId }) => {
-  console.log(data.map((item, index) => `${item} + ${index}`));
   return (
     <div style={{ overflowY: "scroll", height: "400px" }} id={containerId}>
 

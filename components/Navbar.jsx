@@ -8,7 +8,7 @@ export const Navbar = () => {
   const { user } = useUser();
   return (
     <div className="navbar">
-      <div className="navbar-start">
+      <div className="navbar-start ml-4">
         <Link href={"/landing"}>
           <Image src={"/bucky.png"} width={50} height={50}></Image>
         </Link>
@@ -30,14 +30,14 @@ export const Navbar = () => {
       <div className="navbar-end">
         {user ? (
           <Link
-            className="btn btn-ghost mx-4 normal-case"
+            className="btn btn-ghost mx-4 normal-case text-med"
             href={"/api/auth/logout"}
           >
             Logout
           </Link>
         ) : (
           <Link
-            className="btn btn-ghost mx-4 normal-case"
+            className="btn btn-ghost mx-4 normal-case text-med"
             href={"/api/auth/login"}
           >
             Login

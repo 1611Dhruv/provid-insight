@@ -125,8 +125,17 @@ export default function ViewResult({ params }) {
     </div>
 
     <div>
-    <div class="h-96 w-3/4 carousel carousel-vertical rounded-box border-8 border-slate-400 mb-7 bg-slate-50 px-4 py-4 overflow-y-auto">
-      <div className="carousel-item">
+    <div class="h-96 w-3/4 carousel carousel-vertical rounded-box mb-7 bg-slate-50">
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+      <div className="carousel-item h-full px-4 py-4">
+        <div>{currKey && timestamps[currKey].feedback}</div>
+      </div>
+      <div className="carousel-item h-full px-4 py-4">
         <div>{currKey && timestamps[currKey].feedback}</div>
       </div>
     </div>

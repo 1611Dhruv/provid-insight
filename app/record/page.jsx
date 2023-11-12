@@ -6,13 +6,13 @@ export default function RecordingPage() {
   const [file, setFile] = useState(null);
 
   const handleUpload = () => {
-    console.log("YAY");
     if (!file) {
       return;
     }
     try {
       const formData = new FormData();
       formData.append("file", file);
+      console.log(formData);
       fetch("/api/", { method: "POST", body: formData });
     } catch (error) {
       console.log("Error uploading");

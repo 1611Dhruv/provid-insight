@@ -48,12 +48,12 @@ const BarGraph = ({ data }) => {
     <ResponsiveContainer width="100%" height={300}>
       <BarChart
         data={arr}
-        margin={{ top: 10, right: 20, left: 10, bottom: 5 }}
+        margin={{ top: 10, right: 20, left: 10, bottom: 40 }}
+        
       >
-        <XAxis dataKey="name" angle={-45} dy={-10} />
+        <XAxis dataKey="name" angle={-30} dy={10} />
         <YAxis />
         <Tooltip />
-        <Legend />
         <Bar dataKey="val" fill="#8884d8" />
       </BarChart>
     </ResponsiveContainer>

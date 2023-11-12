@@ -29,4 +29,5 @@ export async function GET(req) {
   } catch (err) {
     console.log(err.stack);
   }
+  return Response.json({ data:arr })
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Readable } from "stream";
+import fs from "fs";
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
 const { spawnSync, exec } = require("child_process");
@@ -18,31 +19,40 @@ export async function POST(req) {
     if (!file) {
       return Response.json({ success: true });
     }
-    
-    exec("python llm/annotator.py", async(err, stdout, stderr) => {
-      const json_py = JSON.parse(stdout);
-      await client.connect();
-      const db = client.db(dbName);
-      const bucket = new mongodb.GridFSBucket(db);
-      const id = new mongodb.ObjectId();
-  
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const stream = Readable.from(buffer);
-      stream.pipe(bucket.openUploadStreamWithId(id, file.name, {
-          metadata: { user: email }
-      }));
-  
-      const collection = db.collection(colName);
-      collection.insertOne({
-        user: email,
-        fid: id,
-        ftime: new Date().toISOString(),
-        fname: file.name,
-        data: json_py
-      })
-    })
+    const id = new mongodb.ObjectId();
+    const outfile = "data/" + id + ".mp4";
+    const mp3 = "data/" + id + ".mp3";
 
+    const bytes = await file.arrayBuffer();
+    fs.appendFileSync(outfile, Buffer.from(bytes));
+    const buffer = Buffer.from(bytes);
+    const stream = Readable.from(buffer);
+    exec("ffmpeg -i " + outfile + " " + mp3);
+
+    exec("python llm/annotator.py " + outfile + " " + mp3, async(err, stdout, stderr) => {
+      try {
+        console.log(stdout, stderr, err);
+        const json_py = JSON.parse(stdout);
+        await client.connect();
+        const db = client.db(dbName);
+        const bucket = new mongodb.GridFSBucket(db);
+        
+        stream.pipe(bucket.openUploadStreamWithId(id, file.name, {
+            metadata: { user: email }
+        }));
+    
+        const collection = db.collection(colName);
+        collection.insertOne({
+          user: email,
+          fid: id,
+          ftime: new Date().toISOString(),
+          fname: file.name,
+          data: json_py
+        })
+      } catch (err) {
+        console.log(err.stack);
+      }
+    })
 
   } catch (err) {
     console.log(err.stack);

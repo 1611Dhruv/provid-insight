@@ -26,11 +26,6 @@ export default function RecordingPage() {
     } else {
       alert("Please upload a mp4 video file");
     }
-<<<<<<< HEAD
-    setFile(fileParam);
-
-=======
->>>>>>> a7ea5b3dfda00c828ce58e25aa1a928c727dd4ee
   };
 
   return (

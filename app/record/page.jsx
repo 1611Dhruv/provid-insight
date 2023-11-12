@@ -5,8 +5,19 @@ import { useEffect, useRef, useState } from "react";
 export default function RecordingPage() {
   const [file, setFile] = useState(null);
 
-  const handleSubmit = () => {
-    FormD;
+  const handleUpload = () => {
+    console.log("YAY");
+    if (!file) {
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      fetch("/app/api/", { method: "POST", body: formData });
+    } catch (error) {
+      console.log("Error uploading");
+    }
+    
   };
 
   const processFile = (fileParam) => {
@@ -15,6 +26,7 @@ export default function RecordingPage() {
       return;
     }
     setFile(fileParam);
+
   };
 
   return (
@@ -27,15 +39,10 @@ export default function RecordingPage() {
               Your browser does not support the video tag.
             </video>
             <div className="flex w-[100px] justify-between">
-              <button
-                className="btn"
-                onClick={() => {
-                  setFile(null);
-                }}
-              >
+              <button className="btn" onClick={() => { setFile(null) }}>
                 Reset
               </button>
-              <button className="btn" onClick={() => {}}>
+              <button className="btn" onClick={() => handleUpload()}>
                 Submit
               </button>
             </div>

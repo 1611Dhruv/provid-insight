@@ -4,14 +4,17 @@ import time
 import cv2
 import base64
 import json
+from moviepy.editor import VideoFileClip
+import os
 
-api_key = "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"
+# api_key = "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"
+api_key = "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" # wjxia
 client = AsyncOpenAI(api_key=api_key)
 
 DURATION = 30
 SELECTED_FPS = 1
 SYSTEM_PROMPT = """
-You are a public speaking coach. You are coaching a client who will be giving a presentation. 
+You are a public speaking coach. You are coaching a client who will be giving a presentation, but don't mention who you are in your response. 
 Try to not summarize or describe the presentation but instead give feedback about possible improvements.
 You will be given a transcript and frames from the video of the presentation.
 Do not comment on enunciation, pronunciation, or audio tone because that will not be available to you.
@@ -20,8 +23,8 @@ Pretend you are watching the presentation live and give feedback as if you were 
 For example, do not respond with phrases like "from the frames provided", "from the transcript provided", etc.
 """
 USER_PROMPT = """
-{context} Please critique this short excerpt of my presentation.
-Make sure to comment its the content and accuracy.
+{context} Please critique and give feedback this short excerpt of my presentation.
+Try to focus on the content and accuracy of the presentation and give suggests on how I can improve.
 Please be concise and keep your output to 100 words or less. 
 The transcript may be cutoff in the middle of a sentence, so don't worry about unfinished sentences.
 Here is the transcript and video.
@@ -31,6 +34,11 @@ Transcript: \"""
 \"""
 """
 
+
+def convert_video_to_audio_moviepy(video_file, output_ext="mp3"):
+    filename, _ = os.path.splitext(video_file)
+    clip = VideoFileClip(video_file)
+    clip.audio.write_audiofile(f"{filename}.{output_ext}")
 
 def split_transcripts(transcript) -> list[str]:
     splits = []
@@ -91,6 +99,9 @@ async def get_transcript(audio_link: str):
         get_filler_words_transcript(),
         get_clean_transcript()
     )
+
+    if not filler_words_transcript.text:
+        raise Exception("transcript generation failed")
 
     print(f"finished transcript at {time.strftime('%X')}")
 
@@ -181,11 +192,11 @@ async def get_annotations(video_link: str, transcript, context: str) -> list[str
 
     print(f"finished generating annotations {time.strftime('%X')}")
 
-    return result
+    return result, video_frames[0]
 
 
 FILTER_PROMPT_1 = """
-Can you condense each paragraph down? I want something clear and straightforward, but try to keep as much information as possible.
+Can you condense each paragraph down? I want something clear, straightforward, and in a conversational tone, but try to keep as much information as possible.
 
 Please use this format for your output and keep each paragraph separate:
 \"""
@@ -244,7 +255,7 @@ async def filter_annotations(annotations: list[str]) -> list[str]:
     )
 
     first_filter_result = clean_output(first_filter_result.choices[0].message.content)
-
+    print(len(first_filter_result.split("\n")))
     # first_filter_result = "\n\n".join(annotations)
 
     messages = [{"role": "system", "content": "You are a helpful assistant."}]
@@ -260,7 +271,8 @@ async def filter_annotations(annotations: list[str]) -> list[str]:
         messages=messages,
     )
 
-    output = clean_output(second_filter_result.choices[0].message.content).split("\n\n")
+    output = clean_list(clean_output(second_filter_result.choices[0].message.content).split("\n"))
+    print(len(output))
 
     print(f"finished filtering annotations {time.strftime('%X')}")
 
@@ -268,7 +280,13 @@ async def filter_annotations(annotations: list[str]) -> list[str]:
 
 
 def clean_output(text: str) -> str:
-    return text.replace('"""', "")
+    text =  text.replace('"""', "")
+    text = text.replace('```', "")
+    text = text.replace("\n\n", "\n")
+    return text
+
+def clean_list(text: list[str]) -> list[str]:
+    return list(filter(lambda x: x != "", text))
 
 
 SUMMARY_PROMPT = """
@@ -429,9 +447,9 @@ async def main() -> None:
     # audio_link = "../data/compressed.mp3"
 
     filler_words_transcript, clean_transcript  = await get_transcript(video_link)
-    annotations = await get_annotations(video_link, clean_transcript, context)
+    annotations, first_frame = await get_annotations(video_link, clean_transcript, context)
 
-    print(annotations)
+    # print(parse_video(video_link)[0][0])
 
     filtered_annotations = await filter_annotations(annotations)
     summary, score = await generate_summary(filtered_annotations, filler_words_transcript)
@@ -444,6 +462,8 @@ async def main() -> None:
             score,
         )
     )
+
+    print(first_frame)
 
 
 asyncio.run(main())

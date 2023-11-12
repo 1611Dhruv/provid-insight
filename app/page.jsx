@@ -14,7 +14,7 @@ export default function Home() {
           Welcome Back, {user.given_name}
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 flex mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-2  mb-14">
           <div className="card flex w-96 bg-base-100 shadow-xl mx-4 mb-5">
             <div className="card-body">
               <Link href={"/record"}>

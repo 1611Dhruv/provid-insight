@@ -1,5 +1,6 @@
 "use client";
 import FileDrop from "@/components/FileDrop";
+import Recorder from "@/components/Recorder";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect, useRef, useState } from "react";
 
@@ -26,8 +27,9 @@ export default function RecordingPage() {
   };
 
   const processFile = (acceptedFiles) => {
-    if (acceptedFiles[0].type === "video/mp4") {
-      setFile(acceptedFiles[0]);
+    if (acceptedFiles.type === "video/mp4") {
+      setFile(acceptedFiles);
+      handleUpload();
     } else {
       alert("Please upload a mp4 video file");
     }
@@ -58,7 +60,8 @@ export default function RecordingPage() {
           </div>
         </>
       ) : (
-        <FileDrop processFile={processFile} />
+        // <FileDrop processFile={processFile} />
+        <Recorder processFile={processFile} />
       )}
     </div>
   );

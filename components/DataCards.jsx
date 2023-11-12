@@ -2,7 +2,6 @@ import Link from "next/link";
 import React from "react";
 
 export const DataCards = ({
-  serial,
   uploadTime,
   filename,
   score,

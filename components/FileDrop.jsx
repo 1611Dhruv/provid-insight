@@ -1,20 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 const FileDrop = ({ processFile }) => {
   const fileInput = useRef(null);
   const dropzone = useRef(null);
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const { files } = e.dataTransfer;
-    console.log(files);
-    processFile(files);
-  };
-
   const handleSelection = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -26,8 +16,6 @@ const FileDrop = ({ processFile }) => {
 
   // Adds event handlers for the used references
   useEffect(() => {
-    // event handler for drop
-    dropzone.current.addEventListener("drop", handleDrop);
     // simulates clicking the file
     dropzone.current.addEventListener("click", () => fileInput.current.click());
   }, []);

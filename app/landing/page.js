@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
       <h1 className="text-black text-8xl font-bold text-center mb-8 justify-center">
       ProVid Insight
       </h1>
@@ -13,7 +13,7 @@ export default function LandingPage() {
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
         dolore eu fugiat nulla pariatur. Excepteur sint occaecat
       </p>
-      <Link href={"/"} className="btn btn-primary w-60 mb-7">
+      <Link href={"/"} className="btn btn-accent w-60 mb-7">
         Get Started
       </Link>
 
@@ -21,13 +21,13 @@ export default function LandingPage() {
       <div className="card w-96 bg-base-100 shadow-xl mx-4">
         <div className="card-body">
           <h2 className="card-title">Upload a video and let us analyze your presentation skills</h2>
-          <p>If a dog chews shoes whose shoes does he choose?</p>
+          <p>It's as easy as it sounds. Whether you're grappling with social anxiety or seeking a space for continuous improvement, our platform has your back.</p>
         </div>
       </div>
       <div className="card w-96 bg-base-100 shadow-xl mx-4">
         <div className="card-body">
           <h2 className="card-title">Get fast feedback in many categories, with timestamps</h2>
-          <p>If a dog chews shoes whose shoes does he choose?</p>
+          <p>Navigate through your video to pinpoint specific moments for in-depth analysis. Not only do we offer a convenient summary feature, you can track your progress over time.</p>
         </div>
       </div>
       </div>

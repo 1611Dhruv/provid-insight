@@ -79,12 +79,18 @@ export default function ViewResult({ params }) {
     score: { score: 1 },
   };
   const timestamps = data.timestamps;
-  const [frame, setFrame] = useState(0);
   const [currKey, setCurrKey] = useState(Object.keys(timestamps)[0]);
   const videoRef = useRef(null);
   const handleTimeChange = (e) => {
     if (videoRef.current) {
-      setFrame(videoRef.current.currentTime);
+      let x = Object.keys(timestamps).filter((key) => {
+        const nums = key.split("-");
+        const x = parseFloat(nums[0]);
+        const y = parseFloat(nums[1]);
+        return videoRef.current >= x && videoRef.current < y;
+      })[0];
+      console.log(x);
+      setCurrKey(x);
     }
   };
   return (
@@ -99,20 +105,17 @@ export default function ViewResult({ params }) {
       </video>
       <div>
         {Object.keys(timestamps).map((key) => {
-          const nums = key.split("-");
-          const x = parseFloat(nums[0]);
-          const y = parseFloat(nums[1]);
           return (
             <span
               key={key}
-              className={`${frame >= x && frame < y ? "bg-yellow-200" : null}`}
+              className={`${currKey == key ? "bg-yellow-200" : null}`}
             >
               {timestamps[key].transcript}
             </span>
           );
         })}
       </div>
-      <div>{timestamps["109.12-112.56"].feedback}</div>
+      <div>{timestamps[currKey].feedback}</div>
     </div>
   );
 }

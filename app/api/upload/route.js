@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Readable } from "stream";
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
+const { spawnSync, exec } = require("child_process");
 
 const url =
   "mongodb+srv://dhruv:fv3zByaFflLrV9zP@madhackscluster.9ecahxo.mongodb.net/?retryWrites=true&w=majority";
@@ -19,6 +20,12 @@ export async function POST(req) {
       return Response.json({ success: true });
     }
 
+    exec("python llm/annotator.py ", (err, stdout, stderr) => {
+      console.log(stdout);
+      console.log(stderr);
+    })
+
+    console.log("Python Done")
     await client.connect();
     const db = client.db(dbName);
     const bucket = new mongodb.GridFSBucket(db);

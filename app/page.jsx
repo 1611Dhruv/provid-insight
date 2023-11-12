@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 export default function Home() {
   const { user, isLoading } = useUser();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p></p>;
   return (
     <div>
       <div className="mt-20 flex flex-col items-center">

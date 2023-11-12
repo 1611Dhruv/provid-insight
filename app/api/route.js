@@ -7,28 +7,29 @@ const url = "mongodb+srv://lliangthomas:1JXpWCXDBSoZOp0S@madhackscluster.9ecahxo
 const client = new MongoClient(url);
 const dbName = "MadHacksDB";
 
-export async function upload(username, filename) {
+export async function POST(req) {
     try {
         await client.connect();
         const db = client.db(dbName);
         const bucket = new mongodb.GridFSBucket(db);
-        const collection = db.collection("Users");
-        const id = mongodb.ObjectId();
-        let userDoc = {
-            "email": "",
-            "fid": id,
-            "filename": 
-            "data"
-        }
-        const progress = await collection.insertOne(userDoc);
-
+        const id = new mongodb.ObjectId();
+        console.log(req.body)
         const timeN = new Date();
-
-        fs.createReadStream('./upload-file.mov').
-            pipe(bucket.openUploadStreamWithId(id, {
+        const stream = req.body;
+        fs.stream.pipe(bucket.openUploadStreamWithId(id, {
                 metadata: {  }
             }));
+        
+        // const collection = db.collection("Users");
+
+        // let userDoc = {
+        //     "email": "",
+        //     "fid": id,
+        //     "filename": 
+        // }
+        // const res = await collection.insertOne(userDoc);
     } catch (err) {
         console.log(err.stack);
     }
-};
+    return Response.json({ "Hi":"I am message" })
+}

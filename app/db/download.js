@@ -7,7 +7,7 @@ const url = "mongodb+srv://lliangthomas:1JXpWCXDBSoZOp0S@madhackscluster.9ecahxo
 const client = new MongoClient(url);
 const dbName = "Database";
 
-async function download(username, filename) {
+export async function download(username, filename) {
     try {
         await client.connect();
         const db = client.db(dbName);
@@ -20,5 +20,3 @@ async function download(username, filename) {
     }
 
 }
-
-export default download;

@@ -191,7 +191,7 @@ export default function ViewResult({ params }) {
         </div>
 
         <div
-          className="ml-4 w-11/12 px-4 py-4 text-left bg-slate-300 text-slate-700 rounded-lg h-fit"
+          className="ml-4 w-11/12 px-4 py-4 text-left bg-slate-300 rounded-lg h-fit"
           style={{ alignSelf: "center" }}
         >
           <ScrollableComponent
@@ -199,8 +199,8 @@ export default function ViewResult({ params }) {
               <div
                 className={` mb-6${
                   currKey && timestamps[currKey].feedback === e
-                    ? "text-slate-950 font-bold"
-                    : "text-slate-700"
+                    ? ".text-slate-950 font-bold text-xl"
+                    : "text-base font-normal"
                 }`}
               >
                 {e}

@@ -28,15 +28,21 @@ export async function GET(req) {
         _id: paramFid,
         metadata: { user: user.email }
     });
+    // bucket.openDownloadStream(paramFid)
+    //     .pipe(fs.createWriteStream("data/" + params.get("fid") + ".mp4"));
+    
+    const userCursor = db.collection("Users").find({
+        fid: paramFid,
+        user: user.email
+    });
     
     const arr = await cursor.toArray();
-    if (arr === null) {
-        return Response.json({err:err},{status:404})
+    const userArr = await userCursor.toArray();
+    if (arr === null || userArr == null) {
+        return Response.json({status:404})
     }
-    bucket.openDownloadStream(paramFid)
-        .pipe(fs.createWriteStream("data/" + params.get("fid") + ".mp4"));
-    
-    return Response.json({ data:arr },{status:200})
+
+    return Response.json({ data:userArr }, {status:200})
   } catch (err) {
     console.log(err.stack);
   }

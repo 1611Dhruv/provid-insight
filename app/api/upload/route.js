@@ -18,34 +18,32 @@ export async function POST(req) {
     if (!file) {
       return Response.json({ success: true });
     }
-
-    exec("python llm/annotator.py ", (err, stdout, stderr) => {
-      console.log(stdout);
-      console.log(stderr);
+    
+    exec("python llm/annotator.py", async(err, stdout, stderr) => {
+      const json_py = JSON.parse(stdout);
+      await client.connect();
+      const db = client.db(dbName);
+      const bucket = new mongodb.GridFSBucket(db);
+      const id = new mongodb.ObjectId();
+  
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const stream = Readable.from(buffer);
+      stream.pipe(bucket.openUploadStreamWithId(id, file.name, {
+          metadata: { user: email }
+      }));
+  
+      const collection = db.collection(colName);
+      collection.insertOne({
+        user: email,
+        fid: id,
+        ftime: new Date().toISOString(),
+        fname: file.name,
+        data: json_py
+      })
     })
 
-    console.log("Python Done");
-    await client.connect();
-    const db = client.db(dbName);
-    const bucket = new mongodb.GridFSBucket(db);
-    const id = new mongodb.ObjectId();
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const stream = Readable.from(buffer);
-    stream.pipe(bucket.openUploadStreamWithId(id, file.name, {
-        metadata: { user: email }
-    }));
-
-    const collection = db.collection(colName);
-    collection.insertOne({
-      user: email,
-      fid: id,
-      ftime: new Date().toISOString(),
-      fname: file.name,
-      score: "",
-      description: ""
-    })
   } catch (err) {
     console.log(err.stack);
   } finally {

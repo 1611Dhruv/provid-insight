@@ -4,6 +4,8 @@ import { Readable } from "stream";
 import fs from 'fs';
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
+const concat = require('concat-stream')
+
 
 const url = "mongodb+srv://lliangthomas:1JXpWCXDBSoZOp0S@madhackscluster.9ecahxo.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(url);
@@ -38,10 +40,11 @@ export async function GET(req) {
     
     const arr = await cursor.toArray();
     const userArr = await userCursor.toArray();
-    if (arr === null || userArr == null) {
+    if (arr === null || userArr === null) {
         return Response.json({status:404})
     }
-
+    const data = concat({ encoding: 'buffer' }, bucket.openDownloadStream(paramFid));
+    console.log(data);
     return Response.json({ data:userArr }, {status:200})
   } catch (err) {
     console.log(err.stack);
